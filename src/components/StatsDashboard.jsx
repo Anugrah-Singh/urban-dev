@@ -56,23 +56,23 @@ const StatsDashboard = ({ results, loading }) => {
 
   const StatCard = ({ icon, title, value, unit, trend, trendValue, color = "emerald" }) => {
     const colorClasses = {
-      emerald: "from-emerald-500 to-teal-500",
-      blue: "from-blue-500 to-blue-600",
-      green: "from-green-500 to-green-600",
-      purple: "from-purple-500 to-purple-600",
-      orange: "from-orange-500 to-orange-600",
-      indigo: "from-indigo-500 to-indigo-600"
+      emerald: "from-emerald-400 to-cyan-400",
+      blue: "from-blue-400 to-cyan-400",
+      green: "from-green-400 to-emerald-400",
+      purple: "from-purple-400 to-pink-400",
+      orange: "from-orange-400 to-red-400",
+      indigo: "from-indigo-400 to-purple-400"
     };
 
     return (
-      <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+      <div className="bg-slate-800/50 backdrop-blur-xl rounded-xl shadow-2xl p-6 border border-slate-700/50 hover:shadow-cyan-500/25 hover:shadow-2xl transition-all duration-500 transform hover:scale-105 animate-fadeInUp glass-dark group">
         <div className="flex items-center justify-between mb-4">
-          <div className={`w-12 h-12 bg-gradient-to-r ${colorClasses[color]} rounded-lg flex items-center justify-center shadow-lg`}>
+          <div className={`w-12 h-12 bg-gradient-to-r ${colorClasses[color]} rounded-lg flex items-center justify-center shadow-lg group-hover:animate-pulse`}>
             {icon}
           </div>
           {trend && (
-            <div className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${
-              trend === 'up' ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'
+            <div className={`flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm ${
+              trend === 'up' ? 'text-emerald-300 bg-emerald-500/20 border border-emerald-400/30' : 'text-red-300 bg-red-500/20 border border-red-400/30'
             }`}>
               <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                 {trend === 'up' ? (
@@ -86,23 +86,23 @@ const StatsDashboard = ({ results, loading }) => {
           )}
         </div>
         <div className="space-y-1">
-          <p className="text-2xl font-bold text-gray-900 animate-countUp">
+          <p className="text-3xl font-bold bg-gradient-to-r from-white to-cyan-300 bg-clip-text text-transparent animate-pulse group-hover:scale-110 transition-transform duration-300">
             {typeof value === 'number' ? value.toLocaleString() : value}{unit}
           </p>
-          <p className="text-sm font-medium text-gray-600">{title}</p>
+          <p className="text-sm font-medium text-slate-300">{title}</p>
         </div>
       </div>
     );
   };
 
-  const ProgressRing = ({ percentage, size = 80, strokeWidth = 8, color = "#10B981" }) => {
+  const ProgressRing = ({ percentage, size = 80, strokeWidth = 8, color = "#22D3EE" }) => {
     const radius = (size - strokeWidth) / 2;
     const circumference = radius * 2 * Math.PI;
     const offset = circumference - (percentage / 100) * circumference;
 
     return (
-      <div className="relative inline-flex items-center justify-center">
-        <svg width={size} height={size} className="transform -rotate-90">
+      <div className="relative inline-flex items-center justify-center group">
+        <svg width={size} height={size} className="transform -rotate-90 group-hover:scale-110 transition-transform duration-300">
           <circle
             cx={size / 2}
             cy={size / 2}
@@ -110,7 +110,7 @@ const StatsDashboard = ({ results, loading }) => {
             stroke="currentColor"
             strokeWidth={strokeWidth}
             fill="transparent"
-            className="text-gray-200"
+            className="text-slate-700/50"
           />
           <circle
             cx={size / 2}
@@ -122,10 +122,13 @@ const StatsDashboard = ({ results, loading }) => {
             strokeDasharray={circumference}
             strokeDashoffset={offset}
             strokeLinecap="round"
-            className="transition-all duration-1000 ease-out"
+            className="transition-all duration-1000 ease-out filter drop-shadow-lg"
+            style={{
+              filter: `drop-shadow(0 0 8px ${color}40)`
+            }}
           />
         </svg>
-        <span className="absolute text-xl font-bold text-gray-700">
+        <span className="absolute text-xl font-bold bg-gradient-to-r from-cyan-300 to-purple-300 bg-clip-text text-transparent">
           {Math.round(percentage)}%
         </span>
       </div>
@@ -137,13 +140,26 @@ const StatsDashboard = ({ results, loading }) => {
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-white rounded-xl shadow-md p-6 border border-gray-100 animate-pulse">
-              <div className="w-12 h-12 bg-gray-200 rounded-lg mb-4"></div>
-              <div className="space-y-2">
-                <div className="h-8 bg-gray-200 rounded w-20"></div>
-                <div className="h-4 bg-gray-200 rounded w-32"></div>
+            <div key={i} className="bg-slate-800/50 backdrop-blur-xl rounded-xl shadow-2xl p-6 border border-slate-700/50 animate-pulse glass-dark">
+              <div className="w-12 h-12 bg-gradient-to-r from-slate-600 to-slate-500 rounded-lg mb-4 animate-pulse"></div>
+              <div className="space-y-3">
+                <div className="h-8 bg-gradient-to-r from-slate-600/50 to-slate-500/50 rounded w-20 animate-pulse"></div>
+                <div className="h-4 bg-gradient-to-r from-slate-700/50 to-slate-600/50 rounded w-32 animate-pulse"></div>
               </div>
             </div>
+          ))}
+        </div>
+        {/* Loading particles effect */}
+        <div className="absolute inset-0 pointer-events-none">
+          {[...Array(6)].map((_, i) => (
+            <div 
+              key={i}
+              className={`w-2 h-2 bg-cyan-400 rounded-full opacity-50 animate-particle animation-delay-${i * 200}`}
+              style={{
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${i * 0.3}s`
+              }}
+            />
           ))}
         </div>
       </div>
@@ -203,33 +219,33 @@ const StatsDashboard = ({ results, loading }) => {
 
       {/* Performance Indicators */}
       {stats.totalSpots > 0 && (
-        <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 animate-slideInUp animation-delay-300">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Performance Indicators</h3>
+        <div className="bg-slate-800/50 backdrop-blur-xl rounded-xl shadow-2xl p-6 border border-slate-700/50 animate-slideInUp animation-delay-300 glass-dark hover:shadow-purple-500/20 transition-all duration-500">
+          <h3 className="text-lg font-semibold bg-gradient-to-r from-cyan-300 to-purple-300 bg-clip-text text-transparent mb-6">Performance Indicators</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <ProgressRing percentage={parseInt(stats.avgSuitability)} color="#10B981" />
-              <p className="mt-3 text-sm font-medium text-gray-600">Site Quality</p>
+            <div className="text-center group">
+              <ProgressRing percentage={parseInt(stats.avgSuitability)} color="#22D3EE" />
+              <p className="mt-3 text-sm font-medium text-slate-300 group-hover:text-cyan-300 transition-colors duration-300">Site Quality</p>
             </div>
-            <div className="text-center">
+            <div className="text-center group">
               <ProgressRing 
                 percentage={Math.min((stats.totalSpots / 6) * 100, 100)} 
-                color="#3B82F6" 
-              />
-              <p className="mt-3 text-sm font-medium text-gray-600">Coverage Target</p>
-            </div>
-            <div className="text-center">
-              <ProgressRing 
-                percentage={Math.min((stats.highSuitabilityCount / stats.totalSpots) * 100, 100)} 
                 color="#8B5CF6" 
               />
-              <p className="mt-3 text-sm font-medium text-gray-600">High Priority</p>
+              <p className="mt-3 text-sm font-medium text-slate-300 group-hover:text-purple-300 transition-colors duration-300">Coverage Target</p>
             </div>
-            <div className="text-center">
+            <div className="text-center group">
+              <ProgressRing 
+                percentage={Math.min((stats.highSuitabilityCount / stats.totalSpots) * 100, 100)} 
+                color="#EC4899" 
+              />
+              <p className="mt-3 text-sm font-medium text-slate-300 group-hover:text-pink-300 transition-colors duration-300">High Priority</p>
+            </div>
+            <div className="text-center group">
               <ProgressRing 
                 percentage={Math.min((parseFloat(stats.totalArea) / 15) * 100, 100)} 
                 color="#F59E0B" 
               />
-              <p className="mt-3 text-sm font-medium text-gray-600">Area Development</p>
+              <p className="mt-3 text-sm font-medium text-slate-300 group-hover:text-yellow-300 transition-colors duration-300">Area Development</p>
             </div>
           </div>
         </div>
@@ -238,44 +254,44 @@ const StatsDashboard = ({ results, loading }) => {
       {/* Quick Insights */}
       {stats.totalSpots > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-slideInUp animation-delay-500">
-          <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
+          <div className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 rounded-lg p-4 border border-emerald-400/30 backdrop-blur-sm hover:shadow-emerald-500/25 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="h-5 w-5 text-emerald-400 group-hover:text-emerald-300 transition-colors duration-300" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-green-800">Optimal Distribution</p>
-                <p className="text-xs text-green-600">Great coverage across selected area</p>
+                <p className="text-sm font-medium text-emerald-300 group-hover:text-emerald-200 transition-colors duration-300">Optimal Distribution</p>
+                <p className="text-xs text-emerald-400/80 group-hover:text-emerald-300/80 transition-colors duration-300">Great coverage across selected area</p>
               </div>
             </div>
           </div>
           
-          <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-4 border border-blue-200">
+          <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-lg p-4 border border-cyan-400/30 backdrop-blur-sm hover:shadow-cyan-500/25 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="h-5 w-5 text-cyan-400 group-hover:text-cyan-300 transition-colors duration-300" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-blue-800">AI Validated</p>
-                <p className="text-xs text-blue-600">Locations verified by machine learning</p>
+                <p className="text-sm font-medium text-cyan-300 group-hover:text-cyan-200 transition-colors duration-300">AI Validated</p>
+                <p className="text-xs text-cyan-400/80 group-hover:text-cyan-300/80 transition-colors duration-300">Locations verified by machine learning</p>
               </div>
             </div>
           </div>
           
-          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-200">
+          <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg p-4 border border-purple-400/30 backdrop-blur-sm hover:shadow-purple-500/25 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="h-5 w-5 text-purple-400 group-hover:text-purple-300 transition-colors duration-300" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" />
                 </svg>
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-purple-800">Ready for Implementation</p>
-                <p className="text-xs text-purple-600">Analysis complete, ready to proceed</p>
+                <p className="text-sm font-medium text-purple-300 group-hover:text-purple-200 transition-colors duration-300">Ready for Implementation</p>
+                <p className="text-xs text-purple-400/80 group-hover:text-purple-300/80 transition-colors duration-300">Analysis complete, ready to proceed</p>
               </div>
             </div>
           </div>
