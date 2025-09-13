@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const AdvancedFilters = ({ onFilterChange, neighborhoods, isVisible, onClose }) => {
   const [filters, setFilters] = useState({
