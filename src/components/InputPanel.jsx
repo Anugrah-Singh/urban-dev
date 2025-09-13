@@ -1,17 +1,28 @@
 import React, { useState } from 'react';
+import AdvancedFilters from './AdvancedFilters';
 
 const InputPanel = ({ onAnalyze }) => {
   const [city, setCity] = useState('Bangalore');
   const [neighborhood, setNeighborhood] = useState('Koramangala');
   const [query, setQuery] = useState('Find the best spots for new parks');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [activeFilters, setActiveFilters] = useState({});
+
+  const neighborhoods = [
+    'Koramangala', 'Indiranagar', 'Whitefield', 'Jayanagar', 
+    'Electronic City', 'HSR Layout'
+  ];
 
   const queryTemplates = [
     "Find the best spots for new parks",
     "Identify areas lacking green spaces",
     "Locate optimal zones for pocket parks",
     "Find high-density areas needing parks",
-    "Suggest locations for community gardens"
+    "Suggest locations for community gardens",
+    "Find sports-focused park locations",
+    "Identify eco-friendly park opportunities",
+    "Locate family-friendly park spaces"
   ];
 
   const handleAnalyze = async () => {
@@ -19,7 +30,12 @@ const InputPanel = ({ onAnalyze }) => {
     
     setIsAnalyzing(true);
     try {
-      await onAnalyze({ city, neighborhood, query });
+      await onAnalyze({ 
+        city, 
+        neighborhood, 
+        query,
+        filters: activeFilters
+      });
     } finally {
       setIsAnalyzing(false);
     }
@@ -27,6 +43,20 @@ const InputPanel = ({ onAnalyze }) => {
 
   const handleTemplateSelect = (template) => {
     setQuery(template);
+  };
+
+  const handleFilterChange = (filters) => {
+    setActiveFilters(filters);
+  };
+
+  const getActiveFilterCount = () => {
+    if (!activeFilters) return 0;
+    return (activeFilters.neighborhoods?.length || 0) + 
+           (activeFilters.parkTypes?.length || 0) + 
+           (activeFilters.suitability?.length || 0) +
+           (activeFilters.accessibility ? 1 : 0) +
+           (activeFilters.sustainability ? 1 : 0) +
+           Object.values(activeFilters.proximity || {}).filter(Boolean).length;
   };
 
   return (
@@ -135,6 +165,37 @@ const InputPanel = ({ onAnalyze }) => {
               Use natural language to describe what you're looking for. The AI will understand and analyze accordingly.
             </p>
           </div>
+        </div>
+
+        {/* Advanced Filters Button */}
+        <div className="space-y-3">
+          <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Advanced Options</h3>
+          <button
+            onClick={() => setShowAdvancedFilters(true)}
+            className="w-full p-3 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg hover:from-blue-100 hover:to-purple-100 transition-all duration-200 group"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clipRule="evenodd" />
+                </svg>
+                <div className="text-left">
+                  <div className="font-medium text-blue-800">Advanced Filters</div>
+                  <div className="text-xs text-blue-600">Customize search parameters</div>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                {getActiveFilterCount() > 0 && (
+                  <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+                    {getActiveFilterCount()}
+                  </span>
+                )}
+                <svg className="w-4 h-4 text-blue-600 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </button>
         </div>
       </div>
 
