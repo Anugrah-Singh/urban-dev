@@ -225,6 +225,14 @@ const InputPanel = ({ onAnalyze }) => {
           )}
         </button>
       </div>
+
+      {/* Advanced Filters Modal */}
+      <AdvancedFilters
+        isVisible={showAdvancedFilters}
+        onClose={() => setShowAdvancedFilters(false)}
+        neighborhoods={neighborhoods}
+        onFilterChange={handleFilterChange}
+      />
     </div>
   );
 };
