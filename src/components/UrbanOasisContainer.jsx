@@ -14,6 +14,7 @@ const UrbanOasisContainer = () => {
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [analysisComplete, setAnalysisComplete] = useState(false);
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState('Koramangala');
 
   const handleAnalyze = async (userInput) => {
     setLoading(true);
@@ -32,6 +33,8 @@ const UrbanOasisContainer = () => {
         userInput,
         neighborhoodData: bangaloreData[userInput.neighborhood],
       });
+
+      setSelectedNeighborhood(userInput.neighborhood);
 
       console.log('Agent result:', result);
       const finalResponse = result.finalResponse || [];
@@ -111,9 +114,10 @@ const UrbanOasisContainer = () => {
           
           <div className="w-3/4 relative bg-white shadow-inner">
             <MapDisplay
-              parks={bangaloreData.Koramangala.existing_parks}
+              parks={bangaloreData[selectedNeighborhood]?.existing_parks || []}
               suggestedLocations={suggestedLocations}
               loading={loading}
+              selectedNeighborhood={selectedNeighborhood}
             />
             <ResultsCard results={results} loading={loading} />
           </div>
