@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Import responsive styles for desktop optimization */
+@import "./styles/responsive.css";
+
 /* Custom animations and styles for UrbanOasis AI */
 
 @keyframes fadeInUp {

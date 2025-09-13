@@ -86,19 +86,19 @@ const MapInfo = () => {
   const map = useMap();
 
   return (
-    <div className="absolute top-4 left-4 z-10 bg-white rounded-lg shadow-lg p-4 max-w-xs">
-      <h3 className="font-semibold text-gray-900 mb-2">Map Legend</h3>
-      <div className="space-y-2 text-sm">
+    <div className="absolute top-4 left-4 z-10 bg-white rounded-lg shadow-lg p-3 lg:p-4 max-w-xs lg:max-w-sm">
+      <h3 className="font-semibold text-gray-900 mb-2 text-sm lg:text-base">Map Legend</h3>
+      <div className="space-y-2 text-xs lg:text-sm">
         <div className="flex items-center space-x-2">
-          <div className="w-4 h-4 bg-green-500 rounded-full"></div>
+          <div className="w-3 h-3 lg:w-4 lg:h-4 bg-green-500 rounded-full"></div>
           <span>Existing Parks</span>
         </div>
         <div className="flex items-center space-x-2">
-          <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+          <div className="w-3 h-3 lg:w-4 lg:h-4 bg-blue-500 rounded-full"></div>
           <span>AI Suggestions</span>
         </div>
         <div className="flex items-center space-x-2">
-          <div className="w-4 h-4 bg-red-500 rounded-full opacity-30"></div>
+          <div className="w-3 h-3 lg:w-4 lg:h-4 bg-red-500 rounded-full opacity-30"></div>
           <span>High Density</span>
         </div>
       </div>
@@ -125,8 +125,8 @@ const MapDisplay = ({ parks, suggestedLocations, loading }) => {
     return (
       <div className="h-full w-full bg-gray-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading map...</p>
+          <div className="w-8 h-8 lg:w-12 lg:h-12 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 text-sm lg:text-base">Loading map...</p>
         </div>
       </div>
     );
@@ -138,7 +138,8 @@ const MapDisplay = ({ parks, suggestedLocations, loading }) => {
         center={defaultPosition} 
         zoom={14} 
         style={{ height: '100%', width: '100%' }}
-        zoomControl={false}
+        zoomControl={true}
+        attributionControl={true}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
